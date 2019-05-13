@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const config = require('config');
 const puppeteer = require('puppeteer');
+// TODO Use nedb for persisting state
 
 const username = config.get('credentials.username');
 const password = config.get('credentials.password');
@@ -42,5 +43,7 @@ const password = config.get('credentials.password');
     return anchors.map(link => link.href);;
   });
   console.log(urls);
+  // Use _.forEach, async.everyLimit or async.everySeries, or https://github.com/sindresorhus/p-all
+
   await browser.close();
 })();
