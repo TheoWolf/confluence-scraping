@@ -27,13 +27,20 @@ const password = config.get('credentials.password');
     const [ returnedCookie ] = await page.cookies();
     console.log(returnedCookie);
   }
-  await page.screenshot({path: 'example.png'});
-  const us = await page.evaluate((selector) => {
-    const anochorsList = document.querySelectorAll(selector);
+  try {
+    await page.waitForSelector('ul#child_ul4194715-0');
+    console.log('done waiting');
+  } catch (e) {
+    console.log('Timed out');
+    await page.screenshot({path: 'example2.png'});
+  }
+  console.log('Here');
+  const urls = await page.evaluate(() => {
+    // Anything in here is happening in the browser and seems difficult to debug
+    const anochorsList = document.querySelectorAll('ul#child_ul4194715-0 li div span a');
     const anchors = [...anochorsList];
-    return anchors.map(link => link.href);
-  }, 'ul#child_ul4194715-0 li .plugin_pagetree_children_span > a');
-  console.log(us);
-  
+    return anchors.map(link => link.href);;
+  });
+  console.log(urls);
   await browser.close();
 })();
